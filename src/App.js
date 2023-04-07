@@ -33,7 +33,7 @@ function App() {
       }
 
       
-      //현재 계정을 가져오기.
+      //현재 계정을 가져오기. 
       const accounts = await web3.eth.getAccounts();
       const currentAccount = accounts[0];
       console.log('currentAccount : ' + currentAccount);
