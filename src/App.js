@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import Board from './pages/Board';
 import Test1 from './pages/Test1';
 import Test2 from './pages/Test2';
+import Test3 from './pages/Test3';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                     <Nav.Link as={Link} to="/board">board</Nav.Link>
                     <Nav.Link as={Link} to="/test1">test1</Nav.Link>
                     <Nav.Link as={Link} to="/test2">test2</Nav.Link>
+                    <Nav.Link as={Link} to="/test3">test3</Nav.Link>
                   </Nav>
                 </Navbar.Collapse>
               </Container>
@@ -33,6 +35,7 @@ function App() {
               <Route exact path="/board" element={<Board />} />
               <Route exact path="/test1" element={<Test1 />}  />
               <Route exact path="/test2" element={<Test2 />}  />
+              <Route exact path="/test3" element={<Test3 />}  />
             </Routes>
             
         </Router>
