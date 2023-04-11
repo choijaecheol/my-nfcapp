@@ -25,9 +25,9 @@ const Test2 = () => {
 
   useEffect(() => {
     async function loadContract() {
-      const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
+      const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = MyNFT.networks[networkId]; //error 위치...
+      const deployedNetwork = MyNFT.networks[networkId]; //error 위치...1337
       const contract = new web3.eth.Contract(MyNFT.abi, deployedNetwork.address);
       setNftContract(contract);
     }
