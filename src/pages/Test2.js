@@ -57,6 +57,8 @@ const Test2 = () => {
         from: account,
         to: nftContract.options.address,
         value: price,
+        //add
+        //data : 
       };
       await window.ethereum.request({ method: 'eth_sendTransaction', params: [tx] });
       const txHash = await nftContract.methods.buyNft(nft.id).send({ from: account });
