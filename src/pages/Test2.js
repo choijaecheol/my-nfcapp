@@ -1,88 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import Web3 from 'web3';
-import MyNFT from './MyNFT.json';
+import React, { useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { ethers } from 'ethers';
+import { Contract } from '@ethersproject/contracts';
+import NFT_CONTRACT_ABI from './MyNFT.json'; // ERC721 컨트랙트 ABI를 가져옵니다.
 
-const Test2 = () => {
-    const [account, setAccount] = useState(null);
-  const [nftContract, setNftContract] = useState(null);
-  const [nfts, setNfts] = useState([]);
+// NFT 스마트 컨트랙트 주소를 사용하여 상수를 정의하십시오.
+const NFT_CONTRACT_ADDRESS = '0xCDAF6920687Da6602431a194aAB1645936A031bF';
 
-  useEffect(() => {
-    async function connectWallet() {
-      if (!window.ethereum) {
-        alert('이더리움 지갑을 설치해주세요.');
-        return;
-      }
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-      } catch (err) {
-        console.log('이더리움 지갑에 로그인해주세요.');
-      }
+function Test2() {
+  const { library, account } = useWeb3React();
+  const [tokenId, setTokenId] = useState('');
+
+  const buyNFT = async () => {
+    if (!library || !account) {
+      alert('Please connect to MetaMask first.');
+      return;
     }
-    connectWallet();
-  }, []);
 
-  useEffect(() => {
-    async function loadContract() {
-      const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = MyNFT.networks[networkId]; //error 위치...1337
-      const contract = new web3.eth.Contract(MyNFT.abi, deployedNetwork.address);
-      setNftContract(contract);
-    }
-    loadContract();
-  }, []);
+    // 라이브러리에서 서명자를 가져옵니다.
+    const signer = library.getSigner();
 
-  useEffect(() => {
-    async function getNfts() {
-      if (nftContract) {
-        const nftCount = await nftContract.methods.totalSupply().call();
-        const nftList = [];
-        for (let i = 1; i <= nftCount; i++) {
-          const nftId = await nftContract.methods.tokenByIndex(i - 1).call();
-          const nft = await nftContract.methods.getNft(nftId).call();
-          nftList.push(nft);
-        }
-        setNfts(nftList);
-      }
-    }
-    getNfts();
-  }, [nftContract]);
+    // 서명자를 사용하여 NFT 컨트랙트 인스턴스를 생성합니다.
+    const nftContract = new Contract(NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI.abi, signer);
 
-  async function buyNft(nft) {
-    if (nftContract) {
-      const price = nft.price;
-      const tx = {
-        from: account,
-        to: nftContract.options.address,
-        value: price,
-        //add
-        //data : 
-      };
-      await window.ethereum.request({ method: 'eth_sendTransaction', params: [tx] });
-      const txHash = await nftContract.methods.buyNft(nft.id).send({ from: account });
-      console.log(`트랜잭션 해시: ${txHash.transactionHash}`);
+    // NFT 구매 함수를 호출합니다. 이 예에서는 'buyToken'이라고 가정합니다.
+    try {
+      const buyTx = await nftContract.buyToken(tokenId, {
+        value: ethers.parseEther('0.1'), // 구매 가격을 wei 단위로 전달합니다.
+        gasLimit: 300000 // 필요한 경우 가스 한도를 설정할 수 있습니다.
+      });
+      await buyTx.wait();
+      alert('NFT successfully purchased!');
+    } catch (error) {
+      console.error('Error purchasing NFT:', error);
+      alert('Error purchasing NFT');
     }
-  }
+  };
 
   return (
     <div>
-      <h1>NFT 거래 사이트</h1>
-      <div>계정: {account}</div>
-      <ul>
-        {nfts.map(nft => (
-          <li key={nft.id}>
-            <img src={nft.image} alt={nft.name} width={200} />
-            <h3>{nft.name}</h3>
-            <p>{nft.description}</p>
-            <p>{Web3.utils.fromWei(nft.price, 'ether')} ETH</p>
-            <button onClick={() => buyNft(nft)}>구매하기</button>
-          </li>
-        ))}
-      </ul>
+      <input
+        type="text"
+        value={tokenId}
+        onChange={(e) => setTokenId(e.target.value)}
+        placeholder="Enter Token ID"
+      />
+      <button onClick={buyNFT}>
+        Buy NFT
+      </button>
     </div>
   );
-};
+}
 
 export default Test2;
