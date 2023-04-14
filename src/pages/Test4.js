@@ -1,51 +1,60 @@
-const Web3 = require('web3');
+import React, { useState } from 'react';
+import Web3 from 'web3';
+import { useWeb3React } from '@web3-react/core';
+import { Contract } from '@ethersproject/contracts';
+import { abi as erc20ABI } from './ERC20.json'; // Replace with the ERC-20 contract ABI
+import { Web3ReactProvider } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
 
-// Check if MetaMask is installed and unlocked
-if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
-  // Connect to MetaMask
-  const web3 = new Web3(window.ethereum);
+function App() {
+  const [recipient, setRecipient] = useState('');
+  const [amount, setAmount] = useState('');
+  const { account, library } = useWeb3React();
 
-  // Request account access if needed
-  window.ethereum.enable()
-    .then(() => {
-      // Get the selected account
-      return web3.eth.getAccounts();
-    })
-    .then((accounts) => {
-      const account = accounts[0];
+  const tokenAddress = '0x123456...'; // Replace with the ERC-20 token contract address
 
-      const tokenAddress = '0xCDAF6920687Da6602431a194aAB1645936A031bF'; // Replace with the ERC-20 token contract address
-      const recipient = '0xfa45031CfF019BF84588309EB2CbE1f0d68a4298'; // Replace with the recipient's address
-      const amount = '500'; // Replace with the amount of tokens to transfer (in wei)
+  async function transfer() {
+    try {
+      const tokenContract = new Contract(tokenAddress, erc20ABI, library.getSigner());
 
-      const contractABI = [
-        // Replace with the ERC-20 contract ABI
-        // ...
-      ];
-      const contract = new web3.eth.Contract(contractABI, tokenAddress);
+      const tx = await tokenContract.transfer(recipient, amount);
 
-      const tx = contract.methods.transfer(recipient, amount);
+      const gas = await tx.estimateGas();
 
-      tx.estimateGas({ from: account })
-        .then((gas) => {
-          // Sign and send the transaction using MetaMask
-          return window.ethereum.send({
-            from: account,
-            to: tokenAddress,
-            gas: gas,
-            data: tx.encodeABI(),
-          });
-        })
-        .then((result) => {
-          console.log('Transaction result:', result);
-        })
-        .catch((error) => {
-          console.error('Error sending transaction:', error);
-        });
-    })
-    .catch((error) => {
-      console.error('Error connecting to MetaMask:', error);
-    });
-} else {
-  console.error('MetaMask is not installed or not unlocked.');
+      await tx.send({ from: account, gas });
+
+      console.log('Transaction sent.');
+    } catch (error) {
+      console.error('Error sending transaction:', error);
+    }
+  }
+
+  return (
+    <div>
+      <h1>Transfer Tokens</h1>
+      <div>
+        <label>Recipient:</label>
+        <input type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} />
+      </div>
+      <div>
+        <label>Amount:</label>
+        <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
+      </div>
+      <button onClick={transfer}>Transfer</button>
+    </div>
+  );
+}
+
+function getLibrary(provider) {
+  const library = new Web3(provider);
+  library.pollingInterval = 12000;
+  return library;
+}
+
+export default function Web3App() {
+  return (
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <App />
+    </Web3ReactProvider>
+  );
 }
