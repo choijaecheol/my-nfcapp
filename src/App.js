@@ -8,6 +8,7 @@ import Board from './pages/Board';
 import Test1 from './pages/Test1';
 import Test2 from './pages/Test2';
 import Test3 from './pages/Test3';
+import Test4 from './pages/Test4';
 import Test5 from './pages/Test5';
 import { useWeb3React } from '@web3-react/core';
 import { connectors } from './lib/connectors';
@@ -136,6 +137,7 @@ function App() {
                     <Nav.Link as={Link} to="/test1">test1</Nav.Link>
                     <Nav.Link as={Link} to="/test2">test2</Nav.Link>
                     <Nav.Link as={Link} to="/test3">test3</Nav.Link>
+                    <Nav.Link as={Link} to="/test4">erc20</Nav.Link>
                     <Nav.Link as={Link} to="/test5">test5</Nav.Link>
                     <div>
                         {!active ? (
@@ -167,6 +169,7 @@ function App() {
               <Route exact path="/test1" element={<Test1 />}  />
               <Route exact path="/test2" element={<Test2 />}  />
               <Route exact path="/test3" element={<Test3 />}  />
+              <Route exact path="/test4" element={<Test4 />}  />
               <Route exact path="/test5" element={<Test5 />}  />
             </Routes>
             

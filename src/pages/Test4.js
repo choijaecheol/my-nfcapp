@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
-import { abi as erc20ABI } from './ERC20.json'; // Replace with the ERC-20 contract ABI
+import {ERC20ABI as abi} from "./abi/ERC20ABI"
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
@@ -11,11 +11,11 @@ function App() {
   const [amount, setAmount] = useState('');
   const { account, library } = useWeb3React();
 
-  const tokenAddress = '0x123456...'; // Replace with the ERC-20 token contract address
+  const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // Replace with the ERC-20 token contract address
 
   async function transfer() {
     try {
-      const tokenContract = new Contract(tokenAddress, erc20ABI, library.getSigner());
+      const tokenContract = new Contract(tokenAddress, abi, library.getSigner());
 
       const tx = await tokenContract.transfer(recipient, amount);
 
