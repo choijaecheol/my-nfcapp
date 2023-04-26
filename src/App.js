@@ -40,6 +40,12 @@ function App() {
     deactivate,
     active
   } = useWeb3React();
+
+  console.log('h' + account);
+  console.log('h' + library);
+  console.log('h' + chainId);
+
+
   const [signature, setSignature] = useState("");
   const [error, setError] = useState("");
   const [network, setNetwork] = useState(undefined);

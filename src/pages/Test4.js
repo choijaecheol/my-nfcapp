@@ -9,7 +9,10 @@ import { Web3Provider } from "@ethersproject/providers";
 function App() {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
-  const { account, library } = useWeb3React();
+  const { account, library, chainId } = useWeb3React();
+  
+  console.log(account);
+  console.log(library);
 
   const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // Replace with the ERC-20 token contract address
 
@@ -31,7 +34,7 @@ function App() {
 
   return (
     <div>
-      <h1>Transfer Tokens</h1>
+      <h1>Transfer Tokens <label >{`Account: ${chainId}`}</label> </h1>
       <div>
         <label>Recipient:</label>
         <input type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} />
@@ -53,8 +56,8 @@ function getLibrary(provider) {
 
 export default function Web3App() {
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
+    
       <App />
-    </Web3ReactProvider>
+    
   );
 }
