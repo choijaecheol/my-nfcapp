@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import { Contract } from '@ethersproject/contracts';
-import NFT_CONTRACT_ABI from './MyNFT.json'; // ERC721 컨트랙트 ABI를 가져옵니다.
+import {ERC20ABI as abi} from "./abi/ERC20ABI" // ERC721 컨트랙트 ABI를 가져옵니다.
 
 // NFT 스마트 컨트랙트 주소를 사용하여 상수를 정의하십시오.
 const NFT_CONTRACT_ADDRESS = '0xCDAF6920687Da6602431a194aAB1645936A031bF';
@@ -21,7 +21,7 @@ function Test2() {
     const signer = library.getSigner();
 
     // 서명자를 사용하여 NFT 컨트랙트 인스턴스를 생성합니다.
-    const nftContract = new Contract(NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI.abi, signer);
+    const nftContract = new Contract(NFT_CONTRACT_ADDRESS, abi, signer);
 
     // NFT 구매 함수를 호출합니다. 이 예에서는 'buyToken'이라고 가정합니다.
     try {

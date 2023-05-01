@@ -10,6 +10,8 @@ import Test2 from './pages/Test2';
 import Test3 from './pages/Test3';
 import Test4 from './pages/Test4';
 import Test5 from './pages/Test5';
+import useBalanceOf from './pages/useBalanceOf';
+
 import { useWeb3React } from '@web3-react/core';
 import { connectors } from './lib/connectors';
 import { networkParams } from "./lib/networkParams";
@@ -44,7 +46,11 @@ function App() {
   console.log('h' + account);
   console.log('h' + library);
   console.log('h' + chainId);
-
+  
+  //잔고.
+    //const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // company
+  const tokenAddress = '0x1CBBdD12BB66535AE934bD263e896015c1697100'; // home
+  const balance = useBalanceOf(tokenAddress, account);
 
   const [signature, setSignature] = useState("");
   const [error, setError] = useState("");
@@ -153,6 +159,7 @@ function App() {
                           <button onClick={disconnect}>Disconnect</button>
                           <label >{`Account: ${truncateAddress(account)}`}</label>&nbsp;&nbsp;&nbsp;&nbsp;
                           <label>{`Network ID: ${chainId ? chainId : "No Network"}`}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label>{balance && balance.toString()}</label>
                           </>
                         )}
 

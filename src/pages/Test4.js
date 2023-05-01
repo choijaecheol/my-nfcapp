@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
 import { Contract } from '@ethersproject/contracts';
@@ -6,15 +6,19 @@ import {ERC20ABI as abi} from "./abi/ERC20ABI"
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
+
 function App() {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const { account, library, chainId } = useWeb3React();
-  
+
   console.log(account);
   console.log(library);
+  console.log(chainId);
 
-  const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // Replace with the ERC-20 token contract address
+  //const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // company
+  const tokenAddress = '0x1CBBdD12BB66535AE934bD263e896015c1697100'; // home
+  
 
   async function transfer() {
     try {
@@ -44,6 +48,7 @@ function App() {
         <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
       </div>
       <button onClick={transfer}>Transfer</button>
+
     </div>
   );
 }
