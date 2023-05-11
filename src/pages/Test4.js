@@ -16,8 +16,8 @@ function App() {
   console.log(library);
   console.log(chainId);
 
-  //const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // company
-  const tokenAddress = '0x1CBBdD12BB66535AE934bD263e896015c1697100'; // home
+  const tokenAddress = '0x8416628D411992996a4fD5C4A568E1f61d288407'; // company
+  //const tokenAddress = '0x1CBBdD12BB66535AE934bD263e896015c1697100'; // home
   
 
   async function transfer() {
@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div>
-      <h1>Transfer Tokens <label >{`Account: ${chainId}`}</label> </h1>
+      <h1>Transfer Tokens  </h1> <p>{`Account: ${account}`}</p>
       <div>
         <label>Recipient:</label>
         <input type="text" value={recipient} onChange={(e) => setRecipient(e.target.value)} />
